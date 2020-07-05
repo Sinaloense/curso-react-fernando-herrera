@@ -12,18 +12,15 @@ const PrimeraApp = ( { saludo, subtitulo } ) => {
             {/* <pre>{ JSON.stringify(saludoObject, null, 3) }</pre> */}
             <h1>{ saludo }</h1>
             <p>{ subtitulo }</p>
-            <p>Mi primera aplicación</p>
         </>
     );
 }
 
-PrimeraApp.prototype = {
+PrimeraApp.propTypes = {
     saludo: PropTypes.string.isRequired,
-    subtitulo: PropTypes.string.isRequired,
 };
 
 PrimeraApp.defaultProps = {
-    saludo: 'Hola, soy ???',
     subtitulo: 'Soy un subtitulo',
 };
 
