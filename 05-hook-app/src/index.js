@@ -12,7 +12,8 @@ import ReactDOM from 'react-dom';
 // import { Memorize } from './componentes/06-memos/Memorize';
 // import { MemoHook } from './componentes/06-memos/MemoHook';
 // import { CallbackHook } from './componentes/06-memos/CallbackHook';
-import { Padre } from './componentes/07-tarea-memo/Padre';
+// import { Padre } from './componentes/07-tarea-memo/Padre';
+import { TodoApp } from './componentes/08-useReducer/TodoApp';
 
 import './bootstrap/css/bootstrap.css';
 
@@ -30,7 +31,8 @@ ReactDOM.render(
     {/* <Memorize /> */}
     {/* <MemoHook /> */}
     {/* <CallbackHook /> */}
-    <Padre />
+    {/* <Padre /> */}
+    { <TodoApp /> }
   </React.StrictMode>,
   document.getElementById('root')
 );
