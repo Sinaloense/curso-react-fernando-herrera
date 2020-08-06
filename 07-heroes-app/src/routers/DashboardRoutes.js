@@ -1,0 +1,24 @@
+import React from 'react';
+import { Navbar } from '../ui/Navbar';
+import { Switch, Route, Redirect } from 'react-router-dom';
+
+import { MarvelScreen } from '../marvel/MarvelScreen';
+import { HeroScreen } from '../heroes/HeroScreen';
+import { DcScreen } from '../dc/DcScreen';
+
+export const DashboardRoutes = () => {
+    return (
+        <>
+            <Navbar />
+
+            <div className="container mt-2">
+                <Switch>
+                    <Route exact path="/marvel" component={ MarvelScreen } />
+                    <Route exact path="/dc" component={ DcScreen } />
+                    <Route exact path="/hero/:heroeId" component={ HeroScreen } />
+                    <Redirect to="/marvel" />
+                </Switch>
+            </div>
+        </>
+    )
+}
