@@ -12,6 +12,7 @@ import { AuthRouter } from './AuthRouter';
 import { JournalScreen } from '../components/journal/JournalScreen';
 import { login } from '../actions/auth';
 import { startLoadingNotes } from '../actions/notes';
+import Swal from 'sweetalert2';
 
 export const AppRouter = () => {
     const dispatch                      = useDispatch();
@@ -25,6 +26,20 @@ export const AppRouter = () => {
                 setIsLoggedIn(true);
                 
                 dispatch(startLoadingNotes(user.uid));
+
+                Swal.fire({
+                    toast:              true,
+                    icon:               'success',
+                    title:              'Signed in successfully',
+                    position:           'top-end',
+                    showConfirmButton:  false,
+                    timer:              5000,
+                    timerProgressBar:   true,
+                    onOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
             }
             else {
                 setIsLoggedIn(false);
@@ -36,9 +51,13 @@ export const AppRouter = () => {
 
     if(checking) {
         return (
-            <h1>Wait...</h1>
-        );
+            <div className="auth__main">
+                {  Swal.showLoading() }
+            </div>
+        )
     }
+    
+    Swal.close();
 
     return (
         <Router>

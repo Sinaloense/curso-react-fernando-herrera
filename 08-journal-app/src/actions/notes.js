@@ -17,8 +17,17 @@ export const startNewNote = () => {
             date:   new Date().getTime(),
         }
 
-        dispatch(startLoading());
+        Swal.fire({
+            title:              'Adding a new note...',
+            text:               'Please wait...',
+            allowOutsideClick:  false,
+            onBeforeOpen:       () => {
+                Swal.showLoading();
+            },
+        });
 
+        dispatch(startLoading());
+        
         try {
             const doc = await db.collection(`${ uid }/journal/notes`).add(newNote);
             
@@ -72,6 +81,15 @@ export const startSaveNote = (note) => {
 
         const noteToFirestore = { ...note };
         delete noteToFirestore.id;
+
+        Swal.fire({
+            title:              `Saving ${ note.title }...`,
+            text:               'Please wait...',
+            allowOutsideClick:  false,
+            onBeforeOpen:       () => {
+                Swal.showLoading();
+            },
+        });
 
         try{
             await db.doc(`${ uid }/journal/notes/${ note.id }`).update(noteToFirestore);
@@ -129,6 +147,15 @@ export const startDeleting = (note) => {
         
         if(!result.value)
             return;
+
+        Swal.fire({
+            title:              `Deleting ${ note.title }...`,
+            text:               'Please wait...',
+            allowOutsideClick:  false,
+            onBeforeOpen:       () => {
+                Swal.showLoading();
+            },
+        });
 
         dispatch(startLoading());
         

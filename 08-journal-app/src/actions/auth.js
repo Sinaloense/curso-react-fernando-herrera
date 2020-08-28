@@ -66,6 +66,20 @@ export const startLogout = () => {
 
         dispatch(logout());
         dispatch(noteLogout());
+
+        Swal.fire({
+            toast:              true,
+            icon:               'success',
+            title:              'Logout successfully',
+            position:           'top-end',
+            showConfirmButton:  false,
+            timer:              5000,
+            timerProgressBar:   true,
+            onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
     }
 }
 
