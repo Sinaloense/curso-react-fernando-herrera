@@ -25,7 +25,7 @@ export const JournalEntry = ({
 
     return (
         <div
-            className="journal__entry pointer"
+            className="journal__entry pointer animate__animated animate__backInLeft animate__faster"
             onClick={ handleEntryClick }
         >
             {

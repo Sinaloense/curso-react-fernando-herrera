@@ -7,13 +7,18 @@ import { startNewNote } from '../../actions/notes';
 
 export const Sidebar = () => {
     const dispatch = useDispatch();
-    const { name } = useSelector(state => state.auth);
+    const { auth, ui } = useSelector(state => state);
+    const { name } = auth;
+    const { loading } = ui;
 
     const handleLogout = () => {
         dispatch(startLogout());
     }
 
     const handleAddNew = () => {
+        if(loading)
+            return;
+        
         dispatch(startNewNote());
     }
 

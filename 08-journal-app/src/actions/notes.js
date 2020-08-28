@@ -5,6 +5,7 @@ import { db } from "../firebase/firebaseConfig";
 import { types } from "../types/types";
 import { loadNotes } from "../helpers/loadNotes";
 import { fileUpload } from '../helpers/fileUpload';
+import { startLoading, finishLoading } from './ui';
 
 export const startNewNote = () => {
     return async (dispatch, getState) => {
@@ -16,9 +17,20 @@ export const startNewNote = () => {
             date:   new Date().getTime(),
         }
 
-        const doc = await db.collection(`${ uid }/journal/notes`).add(newNote);
+        dispatch(startLoading());
 
-        dispatch(activeNote(doc.id, newNote));
+        try {
+            const doc = await db.collection(`${ uid }/journal/notes`).add(newNote);
+            
+            dispatch(activeNote(doc.id, newNote));
+            dispatch(addNewNote(doc.id, newNote));
+
+            Swal.fire('New note added', '', 'success');
+        } catch(err) {
+            Swal.fire('Error adding new note', '', 'error');
+        }
+
+        dispatch(finishLoading());
     }
 }
 
@@ -28,6 +40,14 @@ export const activeNote = (id, note) => ({
         id,
         ...note,
     },
+});
+
+export const addNewNote = (id, note) => ({
+    type:   types.notesAddNew,
+    payload: {
+        id,
+        ...note,
+    }
 });
 
 export const startLoadingNotes = (uid) => {
@@ -92,3 +112,43 @@ export const startUploading = (file) => {
         Swal.close();
     }
 }
+
+export const startDeleting = (note) => {
+    return async (dispatch, getState) => {
+        const uid = getState().auth.uid;
+
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        });
+        
+        if(!result.value)
+            return;
+
+        dispatch(startLoading());
+        
+        try {
+            await db.doc(`/${ uid }/journal/notes/${ note.id }`).delete();
+            dispatch(deleteNote(note.id));
+            Swal.fire('Deleted', note.title, 'success');
+        } catch(err) {
+            Swal.fire('Error deleting', note.title, 'error');
+        }
+
+        dispatch(finishLoading());
+    }
+}
+
+export const deleteNote = (id) => ({
+    type:       types.notesDelete,
+    payload:    id,
+});
+
+export const noteLogout = () => ({
+   type: types.notesLogoutCleaning, 
+});
